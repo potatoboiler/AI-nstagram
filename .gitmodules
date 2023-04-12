@@ -1,3 +1,6 @@
 [submodule "xformers"]
 	path = xformers
 	url = https://github.com/facebookresearch/xformers.git
+[submodule "stablediffusion"]
+	path = stablediffusion
+	url = https://github.com/Stability-AI/stablediffusion.git
