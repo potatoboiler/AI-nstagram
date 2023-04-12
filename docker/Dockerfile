@@ -1,5 +1,7 @@
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 
+WORKDIR /root/
+
 # Install base utilities
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -26,6 +28,10 @@ RUN git clone --recurse-submodules -j8 https://github.com/potatoboiler/AI-nstagr
 	&& pip install -r requirements.txt \
 	&& pip install -e .
 
+RUN conda clean -af
+
 WORKDIR /root/AI-nstagram
 
-ENTRYPOINT ["/bin/bash"]
+EXPOSE 80
+
+# ENTRYPOINT ["/bin/bash"]
