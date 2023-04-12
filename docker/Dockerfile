@@ -21,14 +21,10 @@ RUN conda init bash \
 # Install deps
 RUN conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 RUN pip install transformers diffusers invisible-watermark
-
-RUN git clone --recurse-submodules -j8 https://github.com/potatoboiler/AI-nstagram.git \
-	&& cd AI-nstagram/xformers \
-	&& git submodule update --init --recursive \
-	&& pip install -r requirements.txt \
-	&& pip install -e .
-
+RUN conda install xformers -c xformers
 RUN conda clean -af
+
+RUN git clone --recurse-submodules -j8 https://github.com/potatoboiler/AI-nstagram.git
 
 WORKDIR /root/AI-nstagram
 
