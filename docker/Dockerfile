@@ -25,7 +25,7 @@ RUN conda install xformers -c xformers
 RUN pip install transformers diffusers invisible-watermark
 RUN conda clean -af
 
-RUN conda install -c anaconda flask
+RUN conda install -c anaconda flask flask-cors
 RUN conda install -c conda-forge asgiref
 # RUN conda install -c conda-forge fastapi 
 RUN pip install uvicorn[standard]
