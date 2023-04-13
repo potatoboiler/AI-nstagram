@@ -10,28 +10,32 @@ import numpy as np
 
 post_size = 5
 
-sd_prompts = ['orchestra', 'vacation', 'school']
-gpt_prompts = ['bleh']
-gpt_captions = ['out on vacation!']
+sd_prompts = ["orchestra", "vacation", "school"]
+gpt_prompts = ["bleh"]
+gpt_captions = ["out on vacation!"]
 
 model_id = "stabilityai/stable-diffusion-2-1"
 
 pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
-pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-pipe = pipe.to("cuda")
-
-class Post(BaseModel):
-    caption: str
-    images: List[Image.Image | np.ndarray]
-
-class PostCollection(BaseModel):
-    posts: List[Post]
 
 app = FastAPI()
 
+class PostResponse(BaseModel):
+    urls: List[List[str]]
+
+    class Config:
+        orm_mode = True
+
+@app.on_event("startup")
+async def startup_event():
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe = pipe.to("cuda")
+
 @app.get("/")
 async def get_posts():
-    prompts = [random.choice(sd_prompts)] * post_size
-    num_inference_steps = 10
-    images = pipe(prompts, num_inference_steps=num_inference_steps).images
-    return {images}
+    pass
+
+if __name__ == '__main__':
+    import uvicorn
+
+    
