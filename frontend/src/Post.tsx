@@ -27,6 +27,19 @@ class PostMedia extends React.Component<{ data: Base64 }> {
     }
 }
 
+class PostContent extends React.Component<{ data: Base64[] }> { 
+    render(): React.ReactNode {
+        var medias = this.props.data.map((data) => {return <PostMedia data={data} />});
+        return (
+            <div className="post__content">
+              <div className="post__medias">
+                {medias}
+              </div>
+            </div>
+        );
+    }
+}
+
 export default class Post extends React.Component {
     state: { data: Array<Base64>, username: string } = { data: [], username: "" };
 
@@ -82,13 +95,7 @@ export default class Post extends React.Component {
                 </button>
               </div>
 
-              <div className="post__content">
-                <div className="post__medias">
-                  <PostMedia data={this.state.data[0]} />
-                  <PostMedia data={this.state.data[1]} />
-                  <PostMedia data={this.state.data[2]} />
-                </div>
-              </div>
+              <PostContent data={this.state.data} />
 
               <div className="post__footer">
                 <div className="post__buttons">
@@ -174,7 +181,7 @@ export default class Post extends React.Component {
                     <span
                       >Liked by
                       <a className="post__name--underline" href="#"> {generateCaption(Math.floor(Math.random() * 32))}</a> and
-                      <a href="#"> 73 others</a></span>
+                      <a href="#"> {Math.floor(Math.random() * 100)} others</a></span>
                   </div>
 
                   <div className="post__description">
