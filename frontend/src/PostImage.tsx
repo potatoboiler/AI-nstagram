@@ -17,8 +17,7 @@ export default class Post extends React.Component {
     render(): React.ReactNode {
         return (
             <ul>
-                asdofiajsodfij
-                { this.state.data.map((image) => <img key={`${image.slice(image.length-10)}`} src={`data:image/jpeg;base64,${image}`} />)}
+                { this.state.data.map((image) => <img key={`${image.slice(image.length-10)}`} src={`data:image/jpeg;base64,${image}`} alt="alternative content" />)}
             </ul>
         )
     }

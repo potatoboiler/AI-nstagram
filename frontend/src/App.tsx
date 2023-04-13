@@ -1,4 +1,4 @@
-import Post from './Post';
+import Post from './PostImage';
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
