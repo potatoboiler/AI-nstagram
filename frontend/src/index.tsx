@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './ig-style.module.css';
 import App from './App';
 import Igapp from './Igapp';
 
