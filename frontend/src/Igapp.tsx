@@ -178,16 +178,9 @@ class Posts extends React.Component {
     }
 }
 
-export default class Igapp extends React.Component {
-    state: any = {};
-
-    render(): React.ReactNode {
+class Header extends React.Component {
+    render() {
         return (
-        <html lang="en">
-            <head>
-                <title>AOIJFOSIDJF OISDFJ</title>
-            </head>
-        <body>
             <header className={`styles.header`}>
                 <nav className={`styles.header__content`}>
                     <div className={`styles.header__buttons`}>
@@ -208,7 +201,7 @@ export default class Igapp extends React.Component {
                         </svg>
                     </a>
 
-                    <button className={`styles.header__theme-button" title="Toggle Theme`}>
+                    <button className={`styles.header__theme-button`} title="Toggle Theme">
                         <svg
                         className={`styles.header__theme-button-moon`}
                         xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +250,7 @@ export default class Igapp extends React.Component {
                     </svg>
                     </div>
 
-                    <div className={`styles.header__buttons header__buttons--mobile`}>
+                    <div className={`styles.header__buttons styles.header__buttons--mobile`}>
                     <a href="#">
                         <svg
                         width="24"
@@ -333,7 +326,7 @@ export default class Igapp extends React.Component {
                     </a>
                     </div>
 
-                    <div className={`styles.header__buttons header__buttons--desktop`}>
+                    <div className={`styles.header__buttons styles.header__buttons--desktop`}>
                     <a href="#">
                         <svg
                         width="24"
@@ -432,15 +425,13 @@ export default class Igapp extends React.Component {
                     </div>
                 </nav>
             </header>
+        )
+    }
+}
 
-
-            <main className={`styles.main-container`}>
-                <section className={`styles.content-container`}>
-                    <div className={styles.content}>
-                        <Stories />
-                        <Posts />
-                    </div>
-
+class SideMenu extends React.Component {
+    render(): React.ReactNode {
+        return (
                     <section className={`styles.side-menu`}>
                         <div className={`styles.side-menu__user-profile`}>
                             <a
@@ -555,9 +546,13 @@ export default class Igapp extends React.Component {
                             <span className={`styles.side-menu__footer-copyright`} >&copy; 2021 instagram from facebook</span >
                         </div>
                     </section>
-                </section>
-            </main>
-    
+        )
+    }
+}
+
+class Navbar extends React.Component {
+    render(): React.ReactNode {
+        return (
             <nav className={styles.navbar}> 
                 <a href="#" className={`styles.navbar__button`}>
                     <svg
@@ -659,15 +654,36 @@ export default class Igapp extends React.Component {
                     />
                     </svg>
                 </a>
-                <button className={`styles.navbar__button profile-button`}>
+                <button className={`styles.navbar__button styles.profile-button`}>
                     <div className={`styles.profile-button__border`}></div>
                     <div className={`styles.profile-button__picture`}>
                     <img src="assets/default-user.png" />
                     </div>
                 </button>
             </nav>
+        )
+    }
+}
+
+export default class Igapp extends React.Component {
+    state: any = {};
+
+    render(): React.ReactNode {
+        return (
+        <body>
+            <Header />
+
+            <main className={`styles.main-container`}>
+                <section className={`styles.content-container`}>
+                    <div className={styles.content}>
+                        <Stories />
+                        <Posts />
+                    </div>
+                    <SideMenu />
+                </section>
+            </main>
+            <Navbar />
         </body>
-        </html>
         )
     }
 }
