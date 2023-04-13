@@ -1,41 +1,41 @@
+from base64 import encodebytes
 import random
-from typing import Union, List
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
+import PIL
+from asgiref.wsgi import WsgiToAsgi
+from flask import Flask, jsonify
 import torch
-from PIL import Image
-import numpy as np
+from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
+import io
 
-post_size = 5
 
-sd_prompts = ["orchestra", "vacation", "school"]
-gpt_prompts = ["bleh"]
-gpt_captions = ["out on vacation!"]
+batch_size = 4
+num_inference_steps = 10
 
 model_id = "stabilityai/stable-diffusion-2-1"
 
 pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+pipe = pipe.to("cuda")
 
-app = FastAPI()
+prompts = ["school", "beach", "forest"]
 
-class PostResponse(BaseModel):
-    urls: List[List[str]]
+app = Flask(__name__)
 
-    class Config:
-        orm_mode = True
 
-@app.on_event("startup")
-async def startup_event():
-    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-    pipe = pipe.to("cuda")
+def pil_to_jpg(pil_img: PIL.Image.Image):
+    byte_arr = io.BytesIO()
+    pil_img.save(byte_arr, format="JPEG")
+    return encodebytes(byte_arr.getvalue()).decode("ascii")
 
-@app.get("/")
-async def get_posts():
-    pass
 
-if __name__ == '__main__':
-    import uvicorn
+@app.route("/", methods=["GET"])
+async def get_data():
+    images = pipe(
+        random.choice(prompts),
+        num_inference_steps=num_inference_steps,
+        num_images_per_prompt=batch_size,
+    ).images
+    return jsonify({"data": [pil_to_jpg(image) for image in images]})
 
-    
+
+asgi_app = WsgiToAsgi(app)
