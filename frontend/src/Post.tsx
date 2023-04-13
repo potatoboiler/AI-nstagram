@@ -3,7 +3,7 @@ import axios from "axios";
 
 function generateCaption(length: number) {
     let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
     const charactersLength = characters.length;
     let counter = 0;
     while (counter < length) {
@@ -28,9 +28,10 @@ class PostMedia extends React.Component<{ data: Base64 }> {
 }
 
 export default class Post extends React.Component {
-    state: { data: Array<Base64> } = { data: [] };
+    state: { data: Array<Base64>, username: string } = { data: [], username: "" };
 
     componentDidMount(): void {
+      this.setState({ data: this.state.data, username: generateCaption(10)});
       axios.get("http://127.0.0.1:8000/").then((response) => {
         this.setState(response.data);
         console.log("Updating post");
@@ -53,7 +54,7 @@ export default class Post extends React.Component {
                     href="#"
                     target="_blank"
                     className="post__user"
-                    >big boss</a >
+                    >{this.state.username}</a >
                 </div>
 
                 <button className="post__more-options">
@@ -172,8 +173,8 @@ export default class Post extends React.Component {
 
                     <span
                       >Liked by
-                      <a className="post__name--underline" href="#">user123</a> and
-                      <a href="#">73 others</a></span>
+                      <a className="post__name--underline" href="#"> {generateCaption(Math.floor(Math.random() * 32))}</a> and
+                      <a href="#"> 73 others</a></span>
                   </div>
 
                   <div className="post__description">
@@ -182,7 +183,7 @@ export default class Post extends React.Component {
                         className="post__name--underline"
                         href="#"
                         target="_blank"
-                        >leocosta1 </a>
+                        >{this.state.username} </a>
                       {generateCaption(100)}
                     </span>
                   </div>
