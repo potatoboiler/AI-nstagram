@@ -5,7 +5,7 @@ import { useRef } from "react";
 function generateCaption(length: number) {
   let result = "";
   const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_ ";
   const charactersLength = characters.length;
   let counter = 0;
   while (counter < length) {
@@ -78,7 +78,20 @@ const PostButtons = (props: {
   }
 };
 
-// class PostContent extends React.Component<{ data: Base64[] }> {
+const PostMediaIndicator = (props: { media_index: number; length: number }) => {
+  console.log(props.media_index, "but not in a clalback");
+  const indicators = Array(props.length).map((_, index) => {
+    return (
+      <div
+        className={`post__indicator ${
+          index === props.media_index ? "post__indicator--active" : ""
+        }`}
+      ></div>
+    );
+  });
+  return <div className="post__indicators">{indicators}</div>;
+};
+
 const PostContent = (props: { data: Base64[] }) => {
   const [media_index, setMediaIndex] = React.useState(0);
   const medias_ref = useRef<HTMLDivElement>(null);
