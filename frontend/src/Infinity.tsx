@@ -5,7 +5,7 @@ import Post from "./Post";
 const makePost = (id: number) => <Post key={id} />;
 
 function Infinity() {
-  const [posts, setPosts]: [Array<Post>, any] = useState([]);
+  const [posts, setPosts]: [Array<typeof Post>, CallableFunction] = useState([]);
   const [fetching, setFetching] = useState(false);
 
   const loadFunc = useCallback(
