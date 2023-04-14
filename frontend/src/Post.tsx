@@ -116,7 +116,7 @@ const Post = () => {
   const [username, _] = useState<string>(generateCaption(10));
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/").then((response) => {
-      setData(Array.from(response.data));
+      setData(Array.from(response.data.data));
     });
   }, []);
 

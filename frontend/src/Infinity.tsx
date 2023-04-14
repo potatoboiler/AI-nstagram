@@ -2,10 +2,10 @@ import React, { useState, useCallback } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import Post from "./Post";
 
-const makePost = (id: number) => <Post key={id} />;
-
 function Infinity() {
-  const [posts, setPosts]: [Array<typeof Post>, CallableFunction] = useState([]);
+  const [posts, setPosts]: [Array<typeof Post>, CallableFunction] = useState(
+    []
+  );
   const [fetching, setFetching] = useState(false);
 
   const loadFunc = useCallback(
@@ -15,7 +15,7 @@ function Infinity() {
 
       console.log(page);
       try {
-        setPosts([...posts, makePost(posts.length)]);
+        setPosts([...posts, <Post />]);
       } finally {
         setFetching(false);
       }
@@ -24,7 +24,12 @@ function Infinity() {
   );
 
   return (
-    <InfiniteScroll loadMore={loadFunc} hasMore={true} loader={<>"TODO!"</>}>
+    <InfiniteScroll
+      loadMore={loadFunc}
+      hasMore={true}
+      loader={<>"TODO!"</>}
+      className="posts"
+    >
       <>{posts}</>
     </InfiniteScroll>
   );
