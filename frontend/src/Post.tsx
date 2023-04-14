@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
+import { useRef } from "react";
 
 function generateCaption(length: number) {
   let result = "";
@@ -16,83 +17,99 @@ function generateCaption(length: number) {
 
 type Base64 = string;
 
-class PostMedia extends React.Component<{ data: Base64 }> {
-  render(): React.ReactNode {
-    return (
-      <img
-        className="post__media"
-        src={`data:image/jpg;base64,${this.props.data}`}
-        alt="Post Content"
-      />
-    );
-  }
-}
+const PostMedia = (props: { data: Base64 }) => {
+  return (
+    <img
+      className="post__media"
+      src={`data:image/jpg;base64,${props.data}`}
+      alt="Post Content"
+    />
+  );
+};
 
-class PostButtons extends React.Component<{ data: Base64[] }> {
-  state: { foo: boolean } = { foo: true };
-  componentDidMount(): void {
-    console.log("initially rendering buttons", this.props.data);
-    console.log(this.props.data);
-    this.forceUpdate();
-  }
-  componentDidUpdate(
-    prevProps: Readonly<{ data: Base64[] }>,
-    prevState: Readonly<{}>,
-    snapshot?: any
-  ): void {
-    console.log("update", this.props.data.length);
-  }
-  render(): React.ReactNode {
-    if (this.props.data.length > 1) {
-      const leftButtonElement = (
-        <button className="post__left-button">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            {" "}
-            <path
-              fill="#fff"
-              d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z"
-            ></path>{" "}
-          </svg>
-        </button>
-      );
-      const rightButtonElement = (
-        <button className="post__right-button">
+const PostButtons = (props: {
+  data: Base64[];
+  displayLeft: boolean;
+  displayRight: boolean;
+  onClickLeft: () => void;
+  onClickRight: () => void;
+}) => {
+  if (props.data.length > 1) {
+    const leftButtonElement = (
+      <button
+        className="post__left-button"
+        style={{ display: props.displayLeft ? "unset" : "none" }}
+        onClick={props.onClickLeft}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           {" "}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            {" "}
-            <path
-              fill="#fff"
-              d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm113.9 231L234.4 103.5c-9.4-9.4-24.6-9.4-33.9 0l-17 17c-9.4 9.4-9.4 24.6 0 33.9L285.1 256 183.5 357.6c-9.4 9.4-9.4 24.6 0 33.9l17 17c9.4 9.4 24.6 9.4 33.9 0L369.9 273c9.4-9.4 9.4-24.6 0-34z"
-            ></path>{" "}
-          </svg>{" "}
-        </button>
-      );
-
-      return (
-        <>
-          {leftButtonElement}
-          {rightButtonElement}
-        </>
-      );
-    } else {
-      return <>ad sofijasdofi jasdofi jasodfi jasodfi jad</>;
-    }
-  }
-}
-
-class PostContent extends React.Component<{ data: Base64[] }> {
-  render(): React.ReactNode {
-    var medias: Array<JSX.Element> = this.props.data.map((data) => {
-      return <PostMedia data={data} />;
-    });
-    return (
-      <div className="post__content">
-        <div className="post__medias">{medias}</div>
-        <PostButtons data={this.props.data} />
-      </div>
+          <path
+            fill="#fff"
+            d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z"
+          ></path>{" "}
+        </svg>
+      </button>
     );
+    const rightButtonElement = (
+      <button
+        className="post__right-button"
+        style={{ display: props.displayRight ? "unset" : "none" }}
+        onClick={props.onClickRight}
+      >
+        {" "}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          {" "}
+          <path
+            fill="#fff"
+            d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm113.9 231L234.4 103.5c-9.4-9.4-24.6-9.4-33.9 0l-17 17c-9.4 9.4-9.4 24.6 0 33.9L285.1 256 183.5 357.6c-9.4 9.4-9.4 24.6 0 33.9l17 17c9.4 9.4 24.6 9.4 33.9 0L369.9 273c9.4-9.4 9.4-24.6 0-34z"
+          ></path>{" "}
+        </svg>{" "}
+      </button>
+    );
+
+    return (
+      <>
+        {leftButtonElement}
+        {rightButtonElement}
+      </>
+    );
+  } else {
+    return null;
   }
-}
+};
+
+// class PostContent extends React.Component<{ data: Base64[] }> {
+const PostContent = (props: { data: Base64[] }) => {
+  const [media_index, setMediaIndex] = React.useState(0);
+  const medias_ref = useRef<HTMLDivElement>(null);
+
+  return (
+    <div className="post__content">
+      <div className="post__medias" ref={medias_ref}>
+        {props.data.map((data) => (
+          <PostMedia data={data} />
+        ))}
+      </div>
+      <PostButtons
+        data={props.data}
+        displayLeft={media_index !== 0}
+        displayRight={media_index !== props.data.length - 1}
+        onClickLeft={() => {
+          if (medias_ref.current) {
+            medias_ref.current.scrollLeft -= 400;
+          }
+          setMediaIndex(media_index - 1);
+        }}
+        onClickRight={() => {
+          if (medias_ref.current) {
+            medias_ref.current.scrollLeft += 400;
+          }
+          setMediaIndex(media_index + 1);
+        }}
+      />
+    </div>
+  );
+};
 
 export default class Post extends React.Component {
   state: { data: Array<Base64>; username: string } = { data: [], username: "" };
